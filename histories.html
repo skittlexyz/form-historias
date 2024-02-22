@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário História</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .invalid {
+            border-color: var(--bs-form-invalid-border-color);
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+    </style>
+    <style>
+        :root {
+            --accent-color: #ffca2c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex flex-column" id="container">
+        <h1 style="text-align: center; color: var(--accent-color);">Formulário História</h1>
+        <div class="d-flex flex-column mt-2">
+            <button style="color: #000; background-color: var(--accent-color) !important;" type="button"
+                onclick="changePage()" class="btn">Voltar</button>
+        </div>
+        <hr>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Título</th>
+                        <th scope="col">Autor</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="historyTitleAuthor"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="historyText">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function updateHistories() {
+            let histories = JSON.parse(localStorage.getItem('histories'));
+            let table = $('#table');
+
+            histories.forEach((element, index) => {
+                let newRow = $(`<tr id="${index}">` +
+                    `<td>${element["title"]}</td>` +
+                    `<td>${element["author"]}</td>` +
+                    "<td>" +
+                    "<button onclick='readHistory(this)' style='color: #000; background-color: var(--accent-color) !important;' type='button' class='btn' data-bs-toggle='modal' data-bs-target='#exampleModal'>" +
+                    "Ler" +
+                    "</button>" +
+                    "</td>" +
+                    "</tr>"
+                );
+                table.append(newRow);
+            });
+        }
+        function readHistory(parent) {
+            let parentId = $(parent).closest('[id]').attr('id');
+            let history = JSON.parse(localStorage.getItem('histories'))[parseInt(parentId)];
+
+            document.querySelector('#historyTitleAuthor').innerText = (history["title"] + " - " + history["author"]);
+            document.querySelector('#historyText').innerText = (history["history"]);
+            console.log(history);
+        }
+        function changePage() {
+            window.location.href = 'https://skittlexyz.github.io/form-historias/';
+        }
+        updateHistories();
+    </script>
+</body>
+
+</html>
